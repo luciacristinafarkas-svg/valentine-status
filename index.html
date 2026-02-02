@@ -550,12 +550,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.max(0, Math.floor(ms / 86400000)); // 24*60*60*1000
   }
 
-  const days = daysSince(firstSeen);
-  if (subLine){
-    subLine.textContent = days === 0
-      ? "Încă nu m-ai întrebat dacă vreau să fiu partenera ta 😌"
-      : `Au trecut ${days} zile și încă aștept întrebarea aia simplă 😌`;
-  }
+const days = daysSince(firstSeen);
+if (subLine){
+  subLine.textContent = days === 0
+    ? "Astăzi încă nu m-ai întrebat dacă vreau să fiu partenera ta 😌"
+    : `Au trecut ${days} zile și încă aștept întrebarea aia.. 😌`;
+}
+
 
 
   
@@ -1213,6 +1214,7 @@ Dar repar: ${formatRoDate(dinnerDate)} îți gătesc cina. Și fac și o rezerva
 </script>
 </body>
 </html>
+
 
 
 
