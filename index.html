@@ -753,10 +753,17 @@ function cuteBoost(){
   });
 }
   function smsHref(body){
-    const encoded = encodeURIComponent(body);
-    if (SMS_NUMBER && SMS_NUMBER.trim().length > 0) return `sms:${encodeURIComponent(SMS_NUMBER)}&body=${encoded}`;
-    return `sms:&body=${encoded}`;
-  }
+  const encoded = encodeURIComponent(body);
+  const ua = navigator.userAgent || "";
+  const isIOS = /iPad|iPhone|iPod/.test(ua);
+
+  const number = (SMS_NUMBER || "").trim();
+  const base = number ? `sms:${encodeURIComponent(number)}` : `sms:`;
+
+  // iOS e mai ok cu ?body, Android merge și cu ?body
+  const sep = base.includes("?") ? "&" : "?";
+  return `${base}${sep}body=${encoded}`;
+}
 
   // ====== Tap hearts anywhere ======
   function spawnTapHeart(x, y){
@@ -1214,6 +1221,7 @@ Dar repar: ${formatRoDate(dinnerDate)} îți gătesc cina. Și fac și o rezerva
 </script>
 </body>
 </html>
+
 
 
 
