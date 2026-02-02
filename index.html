@@ -532,6 +532,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const hearts = document.getElementById("hearts");
   const rain = document.getElementById("rain");
 
+
+    // ====== First seen (pentru hook dinamic) ======
+  const subLine = document.getElementById("subLine");
+  const FIRST_SEEN_KEY = "firstSeenTs";
+
+  let firstSeen = Number(localStorage.getItem(FIRST_SEEN_KEY) || "0");
+  if (!firstSeen) {
+    firstSeen = Date.now();
+    localStorage.setItem(FIRST_SEEN_KEY, String(firstSeen));
+  }
+
+  function daysSince(ts){
+    const ms = Date.now() - ts;
+    return Math.max(0, Math.floor(ms / 86400000)); // 24*60*60*1000
+  }
+
+  const days = daysSince(firstSeen);
+  if (subLine){
+    subLine.textContent = days === 0
+      ? "Încă nu m-ai întrebat dacă vreau să fiu partenera ta 😌"
+      : `Au trecut ${days} zile și încă aștept întrebarea aia simplă 😌`;
+  }
+
+
+  
   // ====== cute state ======
   let romancePoints = Number(localStorage.getItem("romancePoints") || "0");
   let pillTaps = 0;
@@ -539,13 +564,14 @@ let dinnerLocked = localStorage.getItem("dinnerLocked") === "1";
 
 
 
-let procrastinateCount = Number(localStorage.getItem("procrastinateCount") || "0");
+let procrastinateCount = Number(sessionStorage.getItem("procrastinateCount") || "0");
 
 function bumpProcrastinate(){
   procrastinateCount += 1;
-  localStorage.setItem("procrastinateCount", String(procrastinateCount));
+  sessionStorage.setItem("procrastinateCount", String(procrastinateCount));
   return procrastinateCount;
 }
+
 
 
   // state pentru textul “Cât de aproape...”
@@ -752,11 +778,28 @@ function setDinnerLocked(val){
 
 
   // ====== Point system ======
-  function addPoints(n){
+   function addPoints(n){
     romancePoints = romancePoints + n;
     localStorage.setItem("romancePoints", String(romancePoints));
     renderPill(statusPillTextFromState()); // refresh badge
+
+    // ====== Final unlock ======
+    const FINAL_KEY = "finalUnlocked";
+    if (romancePoints >= 120 && localStorage.getItem(FINAL_KEY) !== "1"){
+      localStorage.setItem(FINAL_KEY, "1");
+      confettiBurst();
+      heartsPop();
+      openModal({
+        title: "💘 Final unlocked",
+        text: "Ok. M-ai convins. Răspunsul e… da. 🙂",
+        actions: [
+          { label: "🫶", className: "primary", onClick: () => closeModal() }
+        ],
+        extraHtml: `<div class="mini muted">Ai ajuns la 120+ points. Ești officially legend.</div>`
+      });
+    }
   }
+
 
   function statusPillTextFromState(){
     // păstrăm textul curent din pill până îl actualizează update()
@@ -1168,4 +1211,5 @@ Dar repar: ${formatRoDate(dinnerDate)} îți gătesc cina. Și fac și o rezerva
 </script>
 </body>
 </html>
+
 
