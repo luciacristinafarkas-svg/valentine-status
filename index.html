@@ -1,0 +1,1170 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valentine’s Status Check 💘</title>
+  <style>
+    :root{
+      --bg1:#0b1020; --bg2:#1a1033;
+      --card: rgba(18, 27, 58, .70);
+      --panel: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.10);
+      --txt:#eef2ff; --muted:#b9c4ff;
+      --accent:#ff4fd8; --accent2:#7c5cff;
+      --ok:#33d17a; --warn:#ffb86b; --bad:#ff5b7a;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing:border-box; }
+    html, body { width:100%; }
+
+    body{
+      margin:0; min-height:100vh; color:var(--txt);
+      background:
+        radial-gradient(1200px 800px at 20% 10%, #2a1a55 0%, transparent 55%),
+        radial-gradient(1200px 800px at 80% 90%, #3a1250 0%, transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      display:flex; align-items:center; justify-content:center;
+      padding: 28px;
+      overflow-x:hidden;
+    }
+
+    @media (max-width: 480px){
+      body{ padding: 14px; }
+    }
+
+    .wrap{ width:min(940px, 100%); min-width:0; }
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      backdrop-filter: blur(12px);
+      position:relative;
+      overflow:hidden;
+      min-width:0;
+      transform: translateZ(0);
+    }
+
+    @media (max-width: 480px){
+      .card{ padding: 16px; }
+    }
+
+    .spark{
+      position:absolute; inset:-2px;
+      border-radius: var(--radius);
+      pointer-events:none;
+      background:
+        radial-gradient(650px 240px at 10% 0%, rgba(255,79,216,.20), transparent 60%),
+        radial-gradient(650px 240px at 90% 100%, rgba(124,92,255,.18), transparent 60%);
+      mix-blend-mode: screen;
+      opacity:.9;
+    }
+
+    .top{
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:16px; flex-wrap:wrap;
+      position:relative;
+      min-width:0;
+    }
+
+    h1{
+      margin:0;
+      font-size: clamp(26px, 3.2vw, 40px);
+      letter-spacing:-.02em;
+      line-height:1.06;
+      display:flex; gap:10px; align-items:center;
+      min-width:0;
+    }
+
+    .sub{
+      margin:10px 0 0;
+      color:var(--muted);
+      font-size: clamp(14px, 1.4vw, 16px);
+      max-width: 62ch;
+    }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+      font-size: 13px;
+      color: var(--muted);
+      user-select:none;
+      white-space:nowrap;
+      max-width:100%;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .pill.pulse { animation: pillPulse 1.2s ease-in-out infinite; }
+    @keyframes pillPulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+
+    .pill .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--txt);
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 14px;
+      position:relative;
+      min-width:0;
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .panel{
+      border-radius: var(--radius);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 16px;
+      min-width:0;
+    }
+    @media (max-width: 480px){
+      .panel{ padding: 14px; }
+    }
+
+    .label{
+      font-size:12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing:.12em;
+      margin-bottom:10px;
+      display:flex; align-items:center; gap:8px;
+    }
+
+    .big{
+      font-size: clamp(20px, 2.2vw, 28px);
+      line-height:1.25;
+      font-weight: 800;
+      margin: 6px 0 0;
+      min-height: 2.6em; /* ca să nu sară layout-ul când se schimbă textul */
+    }
+
+    .meter{
+      margin-top:12px;
+      height: 14px;
+      background: rgba(255,255,255,.10);
+      border-radius:999px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .bar{
+      height:100%;
+      width: 8%;
+      background: linear-gradient(90deg, var(--ok), var(--warn), var(--accent));
+      border-radius:999px;
+      transition: width .8s cubic-bezier(.2,.9,.2,1);
+    }
+
+    .ctaRow{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:14px;
+      align-items:center;
+    }
+
+    button, a.btn{
+      appearance:none;
+      border:0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex; gap:10px; align-items:center;
+      font-weight:800;
+      min-width: 0;
+    }
+
+    @media (max-width: 520px){
+      .ctaRow{ flex-direction:column; align-items:stretch; }
+      .ctaRow button{ width:100%; justify-content:center; }
+    }
+
+    button.primary, a.primary{
+      color:#0b1020;
+      background: linear-gradient(135deg, var(--accent), #ff7ad9);
+      box-shadow: 0 10px 30px rgba(255,79,216,.22);
+      transition: transform .12s ease, filter .12s ease;
+    }
+    button.secondary, a.secondary{
+      background: rgba(255,255,255,.10);
+      color: var(--txt);
+      border: 1px solid rgba(255,255,255,.14);
+      font-weight:700;
+      transition: transform .12s ease, filter .12s ease;
+    }
+
+    button:active, a.btn:active { transform: scale(.98); }
+    @media (hover:hover){
+      button:hover, a.btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
+    }
+
+    .note{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .count{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top:12px;
+      min-width:0;
+    }
+    @media (max-width: 520px){
+      .count{ grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .box{
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      padding: 12px 10px;
+      text-align:center;
+      min-width:0;
+    }
+
+    .num{ font-size: 22px; font-weight: 900; }
+    .unit{
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing:.12em;
+      margin-top:4px;
+    }
+    @media (max-width: 360px){
+      .num{ font-size: 20px; }
+      .unit{ font-size: 10px; }
+    }
+
+    /* Modal */
+    .overlay{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center; justify-content:center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .overlay.show{ display:flex; }
+
+    .modal{
+      width:min(560px, 100%);
+      background: rgba(18, 27, 58, .88);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      box-shadow: 0 25px 80px rgba(0,0,0,.55);
+      backdrop-filter: blur(14px);
+      overflow:hidden;
+      position:relative;
+      min-width:0;
+    }
+    .modalHeader{
+      padding: 14px 16px;
+      display:flex; align-items:center; justify-content:space-between;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      gap:10px;
+      min-width:0;
+    }
+    .modalTitle{
+      font-weight:900;
+      letter-spacing:-.01em;
+      margin:0;
+      display:flex; align-items:center; gap:10px;
+      min-width:0;
+    }
+    .x{
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--txt);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      font-weight:800;
+      flex: 0 0 auto;
+    }
+    .modalBody{ padding: 16px; }
+    .modalText{ color: var(--txt); font-size: 15px; line-height:1.5; margin:0 0 12px; }
+    .modalActions{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
+    .mini{ color: var(--muted); font-size: 12px; margin-top: 10px; }
+
+    /* Confetti */
+    .confetti{ position:fixed; top:-10px; left:0; width:100%; height:0; pointer-events:none; z-index:60; }
+    .piece{
+      position:absolute; top:-20px;
+      width:10px; height:16px;
+      opacity:.95;
+      animation: fall 1.8s linear forwards;
+      border-radius: 3px;
+    }
+    @keyframes fall{
+      to { transform: translateY(110vh) rotate(540deg); opacity:1; }
+    }
+
+    /* Hearts pop */
+    .hearts{
+      position:absolute; inset:0;
+      pointer-events:none;
+      overflow:hidden;
+    }
+    .heart{
+      position:absolute;
+      font-size: 18px;
+      opacity:.95;
+      animation: floatUp 1.4s ease-out forwards;
+      filter: drop-shadow(0 8px 20px rgba(255,79,216,.28));
+    }
+    @keyframes floatUp{
+      from { transform: translateY(20px) scale(.9); opacity:.0; }
+      20% { opacity:1; }
+      to { transform: translateY(-120px) scale(1.15); opacity:0; }
+    }
+
+    /* Sad rain */
+    .rain{
+      position:fixed; inset:0;
+      pointer-events:none;
+      display:none;
+      z-index:55;
+    }
+    .rain.show{ display:block; }
+    .drop{
+      position:absolute;
+      top:-20px;
+      width:2px;
+      height:16px;
+      background: rgba(185,196,255,.35);
+      animation: rainFall 1.0s linear infinite;
+      border-radius: 2px;
+    }
+    @keyframes rainFall{
+      to { transform: translateY(120vh); opacity:.0; }
+    }
+
+    /* Tap hearts */
+    .tapHeart{
+      position: fixed;
+      pointer-events:none;
+      font-size: 18px;
+      z-index: 80;
+      animation: tapFloat 1.05s ease-out forwards;
+      filter: drop-shadow(0 10px 22px rgba(255,79,216,.35));
+    }
+    @keyframes tapFloat{
+      from { transform: translate(-50%, -20%) scale(.85); opacity:0; }
+      15%  { opacity:1; }
+      to   { transform: translate(-50%, -180%) scale(1.25); opacity:0; }
+    }
+
+    .muted{ color: var(--muted); }
+
+/* Mood banner (sad / cute reactions) */
+.mood{
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%) translateY(20px);
+  width: min(560px, calc(100% - 28px));
+  background: rgba(18, 27, 58, .88);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 16px;
+  box-shadow: 0 18px 60px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  padding: 12px 14px;
+  display: none;
+  z-index: 70;
+}
+.mood.show{ display:block; animation: moodIn .28s ease forwards; }
+.mood.hide{ animation: moodOut .22s ease forwards; }
+@keyframes moodIn{
+  from{ opacity:0; transform: translateX(-50%) translateY(20px); }
+  to  { opacity:1; transform: translateX(-50%) translateY(0px); }
+}
+@keyframes moodOut{
+  from{ opacity:1; transform: translateX(-50%) translateY(0px); }
+  to  { opacity:0; transform: translateX(-50%) translateY(16px); }
+}
+
+.moodTitle{ font-weight:900; letter-spacing:-.01em; margin:0 0 2px; }
+.moodText{ margin:0; color: var(--muted); font-size: 13px; line-height:1.35; }
+  
+</style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="spark"></div>
+
+      <div class="top">
+        <div>
+          <h1>🚨 Valentine’s Status Check</h1>
+          <p class="sub">Încă nu m-ai întrebat dacă vreau să fiu partenera ta 😌</p>
+        </div>
+        <div class="pill" id="statusPill">status: pending</div>
+      </div>
+
+      <div class="grid">
+        <!-- LEFT -->
+        <div class="panel">
+          <div class="label">Cât de aproape ești să o dai în bară?</div>
+          <div class="big" id="urgencyText">Se calculează…</div>
+
+          <div class="meter" aria-label="progress meter">
+            <div class="bar" id="bar"></div>
+          </div>
+
+          <div class="ctaRow">
+            <button class="primary" id="btnInitiative">😬 Oops, promit că iau inițiativa</button>
+            <button class="secondary" id="btnDone">😎 Deja m-am ocupat</button>
+          </div>
+
+          <div class="note">Mic reminder: aș prefera să nu fie pe ultima sută de metri 🙂</div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="panel">
+          <div class="label">⏳ Countdown</div>
+          <div class="big">14 februarie</div>
+
+          <div class="count" id="countdown">
+            <div class="box"><div class="num" id="d">—</div><div class="unit">zile</div></div>
+            <div class="box"><div class="num" id="h">—</div><div class="unit">ore</div></div>
+            <div class="box"><div class="num" id="m">—</div><div class="unit">minute</div></div>
+            <div class="box"><div class="num" id="s">—</div><div class="unit">secunde</div></div>
+          </div>
+
+          <div class="note">Nu-ți cer “azi”. Doar… să începi “curând”. 😉</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mood banner -->
+  <div class="mood" id="mood" aria-live="polite"></div>
+
+  <!-- Confetti + Rain layers -->
+  <div class="confetti" id="confetti"></div>
+  <div class="rain" id="rain"></div>
+
+  <!-- MODAL -->
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modalHeader">
+        <h3 class="modalTitle" id="modalTitle">…</h3>
+        <button class="x" id="modalClose">✕</button>
+      </div>
+      <div class="modalBody">
+        <p class="modalText" id="modalText"></p>
+        <div class="modalActions" id="modalActions"></div>
+        <div id="modalExtra"></div>
+      </div>
+      <div class="hearts" id="hearts"></div>
+    </div>
+  </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // ====== CONFIG ======
+  const SMS_NUMBER = ""; // "+407xxxxxxxx" dacă vrei preset
+  const TEXT_ROTATE_MS = 10000; // cât timp rămâne același mesaj “Cât de aproape…”
+  const TICK_MS = 300;          // countdown + bar fluid, dar fără “spam” la text
+
+  // penalizări / recompense (ajustează cum vrei)
+  const POINTS = {
+    curiosity: +7,
+    initiative: +3,
+    admit_backlog: +8,
+    send_message: +8,
+    dinner_plan: +18,
+    booked: +20,
+    caught_lying: -25,   // AICI: scade mai mult
+    small_lie_fee: -10
+  };
+
+  // ====== Target date: next Feb 14 at 18:00 local ======
+  const now = new Date();
+  const thisYear = now.getFullYear();
+  let target = new Date(thisYear, 1, 14, 18, 0, 0);
+  if (now > target) target = new Date(thisYear + 1, 1, 14, 18, 0, 0);
+
+  // ====== DOM refs ======
+  const statusPill = document.getElementById("statusPill");
+  const urgencyText = document.getElementById("urgencyText");
+  const bar = document.getElementById("bar");
+
+  const dEl = document.getElementById("d");
+  const hEl = document.getElementById("h");
+  const mEl = document.getElementById("m");
+  const sEl = document.getElementById("s");
+
+  const btnInitiative = document.getElementById("btnInitiative");
+  const btnDone = document.getElementById("btnDone");
+
+  const overlay = document.getElementById("overlay");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalText = document.getElementById("modalText");
+  const modalActions = document.getElementById("modalActions");
+  const modalExtra = document.getElementById("modalExtra");
+  const modalClose = document.getElementById("modalClose");
+  const confetti = document.getElementById("confetti");
+  const hearts = document.getElementById("hearts");
+  const rain = document.getElementById("rain");
+
+  // ====== cute state ======
+  let romancePoints = Number(localStorage.getItem("romancePoints") || "0");
+  let pillTaps = 0;
+let dinnerLocked = localStorage.getItem("dinnerLocked") === "1";
+
+
+
+let procrastinateCount = Number(localStorage.getItem("procrastinateCount") || "0");
+
+function bumpProcrastinate(){
+  procrastinateCount += 1;
+  localStorage.setItem("procrastinateCount", String(procrastinateCount));
+  return procrastinateCount;
+}
+
+
+  // state pentru textul “Cât de aproape...”
+  let lastVibeKey = "";
+  let lastLine = "";
+  let lastLineAt = 0;
+
+  const LINES = {
+    chill: [
+      "😌 Avem timp. Dar nu-l irosi cu “las’ că merge”.",
+      "🙂 E ok. Dar ai putea să fii și mai cute azi.",
+      "😏 Ai timp… dar eu am memorie bună."
+    ],
+    mid: [
+      "😏 Încă e lejer… dar văd că îți place suspansul.",
+      "🙂 E momentul perfect pentru un gest mic. Mic-mic.",
+      "🫣 Ușor-ușor intrăm pe modul “hai că fac mâine”."
+    ],
+    late: [
+      "😬 Suntem fix în zona 'ultima sută de metri'. Don’t.",
+      "🫣 Nu zic nimic… doar mă uit la calendar.",
+      "🚨 Bun. Acum chiar trebuie un plan."
+    ],
+    overtime: [
+      "😶 Too late… dar încă poți salva situația.",
+      "🥲 Ai intrat pe Hard Mode. Eu cred în tine… cumva."
+    ],
+    roast: [
+      "Sistemul detectează scuzele. Cu 99.9% acuratețe. 🤖",
+      "Am întrebat calendarul. A râs. 🗓️",
+      "Îți dau un hint: 'curând' nu înseamnă 'în 2029'. 😇"
+    ]
+  };
+
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+  function format2(n){ return String(n).padStart(2, "0"); }
+
+  function vibrate(ms=18){
+    if ("vibrate" in navigator) navigator.vibrate(ms);
+  }
+
+  function badgeFromPoints(p){
+    if (p >= 120) return "legend 💘";
+    if (p >= 70) return "solid 💖";
+    if (p >= 30) return "decent 💗";
+    return "pending 😅";
+  }
+
+  function renderPill(text){
+    const badge = badgeFromPoints(romancePoints);
+    statusPill.innerHTML = `${text} <span class="badge">${romancePoints >= 0 ? "+" : ""}${romancePoints} · ${badge}</span>`;
+  }
+
+  function openModal({title, text, actions, extraHtml=""}){
+    modalTitle.textContent = title;
+    modalText.textContent = text;
+    modalActions.innerHTML = "";
+    modalExtra.innerHTML = extraHtml;
+
+    actions.forEach(a => {
+      const el = document.createElement(a.href ? "a" : "button");
+      const cls = a.className || "";
+      if (a.href) {
+        el.href = a.href;
+        el.className = `btn ${cls}`.trim();
+        el.setAttribute("role", "button");
+      } else {
+        el.type = "button";
+        el.className = cls;
+      }
+      el.textContent = a.label;
+      if (a.onClick) el.addEventListener("click", a.onClick);
+      modalActions.appendChild(el);
+    });
+
+    overlay.classList.add("show");
+  }
+
+  function closeModal(){
+    overlay.classList.remove("show");
+    hearts.innerHTML = "";
+  }
+
+  modalClose.addEventListener("click", closeModal);
+  overlay.addEventListener("click", (e)=>{ if(e.target === overlay) closeModal(); });
+  document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeModal(); });
+
+  function confettiBurst(){
+    const colors = ["#ff4fd8", "#7c5cff", "#33d17a", "#ffb86b", "#eef2ff"];
+    const N = 120;
+    for(let i=0;i<N;i++){
+      const p = document.createElement("div");
+      p.className = "piece";
+      const x = Math.random()*100;
+      const size = 6 + Math.random()*10;
+      p.style.left = x + "vw";
+      p.style.width = size + "px";
+      p.style.height = (size*1.4) + "px";
+      p.style.background = colors[Math.floor(Math.random()*colors.length)];
+      p.style.animationDuration = (1.2 + Math.random()*1.4) + "s";
+      p.style.transform = `rotate(${Math.random()*360}deg)`;
+      confetti.appendChild(p);
+      setTimeout(()=>p.remove(), 2500);
+    }
+  }
+
+  function heartsPop(){
+    const emojis = ["💖","💘","💗","💞","💝"];
+    for (let i=0;i<14;i++){
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      h.style.left = (10 + Math.random()*80) + "%";
+      h.style.top = (60 + Math.random()*30) + "%";
+      h.style.animationDuration = (1.0 + Math.random()*0.8) + "s";
+      hearts.appendChild(h);
+      setTimeout(()=>h.remove(), 1600);
+    }
+  }
+
+  function startRain(){
+    rain.innerHTML = "";
+    rain.classList.add("show");
+    const drops = 80;
+    for (let i=0;i<drops;i++){
+      const d = document.createElement("div");
+      d.className = "drop";
+      d.style.left = (Math.random()*100) + "vw";
+      d.style.animationDuration = (0.7 + Math.random()*0.9) + "s";
+      d.style.animationDelay = (Math.random()*0.6) + "s";
+      d.style.height = (10 + Math.random()*18) + "px";
+      rain.appendChild(d);
+    }
+  }
+
+  function stopRain(){
+    rain.classList.remove("show");
+    rain.innerHTML = "";
+  }
+
+
+  // Mood banner
+const mood = document.getElementById("mood");
+
+function showMood({title, text, ms=2400, rainOn=false}){
+  if (!mood) return;
+  if (rainOn) startRain();
+
+  mood.innerHTML = `
+    <div class="moodTitle">${title}</div>
+    <p class="moodText">${text}</p>
+  `;
+  mood.classList.remove("hide");
+  mood.classList.add("show");
+
+  setTimeout(() => {
+    mood.classList.remove("show");
+    mood.classList.add("hide");
+    setTimeout(() => {
+      mood.classList.remove("hide");
+      mood.style.display = "none";
+      mood.style.display = ""; // reset
+      // optional: rain stays on unless you stop it elsewhere
+    }, 220);
+  }, ms);
+}
+
+function cuteBoost(){
+  heartsPop();
+  showMood({
+    title: "🫶 Așa te vreau!",
+    text: "Puncte bonus pentru inițiativă. Sistemul aprobă. ✅",
+    ms: 1800,
+    rainOn: false
+  });
+}
+  function smsHref(body){
+    const encoded = encodeURIComponent(body);
+    if (SMS_NUMBER && SMS_NUMBER.trim().length > 0) return `sms:${encodeURIComponent(SMS_NUMBER)}&body=${encoded}`;
+    return `sms:&body=${encoded}`;
+  }
+
+  // ====== Tap hearts anywhere ======
+  function spawnTapHeart(x, y){
+    const emojis = ["💖","💘","💞","💗","💝","✨"];
+    const el = document.createElement("div");
+    el.className = "tapHeart";
+    el.textContent = pick(emojis);
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 1100);
+  }
+  document.addEventListener("pointerdown", (e)=>{
+    if (e.target && e.target.id === "modalClose") return;
+    spawnTapHeart(e.clientX, e.clientY);
+  });
+
+function setDinnerLocked(val){
+  dinnerLocked = val;
+  localStorage.setItem("dinnerLocked", val ? "1" : "0");
+}
+
+
+  // ====== Point system ======
+  function addPoints(n){
+    romancePoints = romancePoints + n;
+    localStorage.setItem("romancePoints", String(romancePoints));
+    renderPill(statusPillTextFromState()); // refresh badge
+  }
+
+  function statusPillTextFromState(){
+    // păstrăm textul curent din pill până îl actualizează update()
+    // dar badge-ul se re-randează corect
+    // (fallback dacă e gol)
+    const raw = (statusPill.getAttribute("data-status") || "status: pending");
+    return raw;
+  }
+
+  function setPillStatus(text, pulse=false){
+    statusPill.setAttribute("data-status", text);
+    renderPill(text);
+    statusPill.classList.toggle("pulse", !!pulse);
+  }
+
+  // ====== date helpers for dinner plan ======
+function nextDinnerInNext3DaysNotToday(h=19, m=30){
+  const now = new Date();
+  // mâine / poimâine / peste 3 zile (max)
+  const options = [1,2,3].map(add => {
+    const d = new Date(now);
+    d.setDate(d.getDate() + add);
+    d.setHours(h, m, 0, 0);
+    return d;
+  });
+
+  // alegem primul care e în viitor (ar trebui să fie mereu), dar păstrăm logică robustă
+  return options.find(d => d > now) || options[0];
+}
+
+function formatRoDate(dt){
+  const wd = ["Duminică","Luni","Marți","Miercuri","Joi","Vineri","Sâmbătă"][dt.getDay()];
+  const dd = String(dt.getDate()).padStart(2,"0");
+  const mm = String(dt.getMonth()+1).padStart(2,"0");
+  const hh = String(dt.getHours()).padStart(2,"0");
+  const mi = String(dt.getMinutes()).padStart(2,"0");
+  return `${wd}, ${dd}.${mm} la ${hh}:${mi}`;
+}
+
+
+  // ====== smarter message rotation (fix for “moves too fast”) ======
+  function vibeKeyFromDays(days, overtime){
+    if (overtime) return "overtime";
+    if (days <= 2) return "critical";
+    if (days <= 7) return "late";
+    if (days <= 21) return "mid";
+    return "chill";
+  }
+
+  function pickLineForVibe(vibeKey){
+    if (vibeKey === "overtime") return pick(LINES.overtime);
+    if (vibeKey === "critical") return pick(LINES.late);
+    if (vibeKey === "late") return pick(LINES.late);
+    if (vibeKey === "mid") return pick(LINES.mid);
+    return pick(LINES.chill);
+  }
+
+  function update(){
+    const now = new Date();
+    const diff = target - now;
+
+    if (diff <= 0){
+      dEl.textContent = "00"; hEl.textContent = "00"; mEl.textContent = "00"; sEl.textContent = "00";
+      bar.style.width = "100%";
+
+      const vibeKey = "overtime";
+      const shouldRotate = (vibeKey !== lastVibeKey) || (now - lastLineAt > TEXT_ROTATE_MS);
+      if (shouldRotate){
+        lastVibeKey = vibeKey;
+        lastLine = pickLineForVibe(vibeKey);
+        lastLineAt = now;
+        urgencyText.textContent = lastLine;
+      }
+
+      setPillStatus("🧨 status: overtime", true);
+      return;
+    }
+
+    const totalSec = Math.floor(diff/1000);
+    const days = Math.floor(totalSec / 86400);
+    const hrs = Math.floor((totalSec % 86400) / 3600);
+    const mins = Math.floor((totalSec % 3600) / 60);
+    const secs = totalSec % 60;
+
+    dEl.textContent = format2(days);
+    hEl.textContent = format2(hrs);
+    mEl.textContent = format2(mins);
+    sEl.textContent = format2(secs);
+
+    // meter: 0 at 30+ days, 100 at 0 days
+    const meter = clamp(100 - (days/30)*100, 6, 100);
+    bar.style.width = meter.toFixed(0) + "%";
+
+    const vibeKey = vibeKeyFromDays(days, false);
+
+    // actualizează mesajul rar: la schimbare de vibe sau o dată la TEXT_ROTATE_MS
+    const shouldRotate = (vibeKey !== lastVibeKey) || (now - lastLineAt > TEXT_ROTATE_MS);
+    if (shouldRotate){
+      lastVibeKey = vibeKey;
+      lastLine = pickLineForVibe(vibeKey);
+      lastLineAt = now;
+      urgencyText.textContent = lastLine;
+    }
+
+    // status pill text
+    let vibeText = "warming up";
+    let pulse = false;
+    if (vibeKey === "chill") vibeText = "chill";
+    if (vibeKey === "mid") vibeText = "warming up";
+    if (vibeKey === "late") { vibeText = "last-minute risk"; pulse = true; }
+    if (vibeKey === "critical") { vibeText = "CRITICAL"; pulse = true; }
+
+    setPillStatus("status: " + vibeText, pulse);
+if (dinnerLocked){
+  setPillStatus("🍝 status: dinner queued", true);
+}
+  
+}
+
+  // kickoff
+  setPillStatus("status: pending", false);
+  update();
+  setInterval(update, TICK_MS);
+
+  // ====== Easter egg on pill ======
+  statusPill.addEventListener("click", () => {
+    pillTaps++;
+    vibrate(10);
+    if (pillTaps >= 3){
+      pillTaps = 0;
+      addPoints(POINTS.curiosity);
+      confettiBurst();
+      openModal({
+        title: "Secret mode unlocked ✨",
+        text: pick(LINES.roast),
+actions: [
+  {
+    label: "Ok, fair 😂",
+    className: "primary",
+    onClick: () => closeModal()
+  },
+  {
+    label: "🔄 Reset dinner status",
+    className: "secondary",
+    onClick: () => {
+      setDinnerLocked(false);   // 👈 AICI
+      closeModal();
+    }
+  }
+],
+
+        extraHtml: `<div class="mini muted">Ai primit +${POINTS.curiosity} romance points pentru curiozitate.</div>`
+      });
+    }
+  });
+
+  // ====== Button flows ======
+  btnInitiative.addEventListener("click", () => {
+    stopRain();
+    vibrate(18);
+    addPoints(POINTS.initiative);
+cuteBoost();
+
+
+    openModal({
+      title: "Ok, let’s see… 😌",
+      text: "Dar până atunci: nu ești cam în urmă cu gesturile romantice?",
+      actions: [
+        {
+          label: "Ba da ... 🙃",
+          className: "primary",
+          onClick: () => {
+            vibrate(18);
+            addPoints(POINTS.admit_backlog);
+
+            const dinnerDate = nextDinnerInNext3DaysNotToday(19, 30);
+const dinnerText = `Ok, recunosc: am niște restanțe la gesturi romantice 😅
+Azi nu pot (știu, vin târziu)… dar în următoarele 3 zile repar:
+${formatRoDate(dinnerDate)} îți gătesc cina. 
+Și ca să fiu safe, fac și o rezervare “backup” la un loc drăguț. 💘
+Ce zici?
+Dar până atunci.. mă gândeam că aș vrea să îți spun [că sunt dragostea și fericirea ta 💖💖💖? și mai ceee?👀]`;
+
+
+            openModal({
+              title: "Bun. Progres. 😌",
+              text: "Alege o variantă concretă și ești deja pe plus:",
+              actions: [
+                {
+                  label: "Trimite mesaj drăguț 💬",
+                  className: "primary",
+                  href: smsHref(dinnerText),
+                  onClick: () => addPoints(POINTS.send_message)
+                },
+                {
+  label: `🍝 Pregătesc cina (în următoarele 3 zile) + rezervare backup`,
+  className: "secondary",
+  onClick: () => {
+    setDinnerLocked(true);          // 👈 ASTA era întrebarea ta
+    addPoints(POINTS.dinner_plan);
+    confettiBurst();
+    heartsPop();
+    closeModal();
+  }
+},
+
+                {
+                  label: "Ok, revin 😅",
+                  className: "secondary",
+                  onClick: () => closeModal()
+                }
+              ],
+              extraHtml: `
+                <div class="mini muted">
+                  Mini-plan (30 sec):<br/>
+                  ✅ 1) confirmă ora<br/>
+                  ✅ 2) întreabă preferințe (“paste? vedem ce pofta ai atunci?”)<br/>
+                  ✅ 3) pune în calendar (și chiar fă rezervarea backup 😇)
+                </div>`
+            });
+          }
+        },
+        {
+          label: "Nu 😇",
+          className: "secondary",
+          onClick: () => {
+            vibrate(14);
+            openModal({
+              title: "Haha… nice try. 😏",
+              text: "Cred că poți mai mult. N-ai niciun gest mic pe care îl poți face chiar acum?",
+              actions: [
+                {
+                  label: "Ok, știu… 😌",
+                  className: "primary",
+                  onClick: () => {
+  addPoints(+5);
+  closeModal();
+
+  showMood({
+    title: "👀 Sunt curioasă…",
+    text: "Bun. Atunci spune-mi: cum mă surprinzi? Ce declarație îmi faci? 💭",
+    ms: 2600,
+    rainOn: false
+  });
+
+  heartsPop();
+}
+
+                },
+                {
+                  label: "Mă mai gândesc 🫣",
+                  className: "secondary",
+onClick: () => {
+  closeModal();
+  const n = bumpProcrastinate();
+
+  if (n === 1){
+    showMood({
+      title: "😔 Of…",
+      text: "Ok. Aștept. Dar un pic de inițiativă m-ar fi făcut să zâmbesc.",
+      ms: 2600,
+      rainOn: true
+    });
+  } else if (n === 2){
+    showMood({
+      title: "🥲 A doua oară deja…",
+      text: "Calendarul meu a oftat. Și eu la fel. 🙂",
+      ms: 2800,
+      rainOn: true
+    });
+  } else if (n === 3){
+    showMood({
+      title: "🚨 Achievement unlocked: „Procrastinator”",
+      text: "Ai deblocat nivelul 3 de amânare. Următorul: scuze creative. 😇",
+      ms: 3200,
+      rainOn: false
+    });
+    // optional: penalizare mică
+    addPoints(-3);
+  } else {
+    showMood({
+      title: "🫠 Ok, gata.",
+      text: "Dacă mai apeși o dată, îți trimit eu invitația. Cu semnătură. 🤝",
+      ms: 3200,
+      rainOn: false
+    });
+  }
+
+  vibrate(12);
+}
+
+                }
+              ]
+            });
+          }
+        }
+      ],
+      extraHtml: `<div class="mini muted">Ai primit +${POINTS.initiative} points pentru inițiativă. (Așa da.)</div>`
+    });
+  });
+
+  btnDone.addEventListener("click", () => {
+    stopRain();
+    vibrate(18);
+
+    openModal({
+      title: "Hmm… mai gândește-te puțin… 🤨",
+      text: "Ești sigur că “deja te-ai ocupat”?",
+      actions: [
+        {
+          label: "M-am gândit. Sunt sigur 😎",
+          className: "primary",
+          onClick: () => {
+            stopRain();
+            vibrate(28);
+            addPoints(POINTS.booked);
+            confettiBurst();
+            heartsPop();
+            openModal({
+              title: "Ok. Mă bucur. 💖",
+              text: "D-abia aștept. (Și îți apreciez curajul.)",
+              actions: [
+                { label: "Deal 🤝", className: "primary", onClick: () => closeModal() }
+              ],
+              extraHtml: `<div class="mini muted">+${POINTS.booked} romance points. Dacă minți, sistemul îți ia serios. 😇</div>`
+            });
+          }
+        },
+        {
+          label: "Ok, m-ai prins 🥲",
+          className: "secondary",
+          onClick: () => {
+            startRain();
+            vibrate(12);
+            addPoints(POINTS.caught_lying);
+
+            const dinnerDate = nextDinnerInNext3DaysNotToday(19, 30);
+            const rescueText = `Ok… m-ai prins 😅
+Dar repar: ${formatRoDate(dinnerDate)} îți gătesc cina. Și fac și o rezervare backup la un loc drăguț. 💘
+Îmi dai voie să mă revanșez?`;
+
+            openModal({
+              title: "Of… 😢",
+              text: "Sunt tristă să aud asta… dar măcar nu-i timpul pierdut. Încă poți face ceva frumos.",
+              actions: [
+                {
+                  label: "Trimit un mesaj acum 💬",
+                  className: "primary",
+                  href: smsHref(rescueText),
+                  onClick: () => addPoints(POINTS.send_message)
+                },
+{
+  label: "Ok…",
+  className: "secondary",
+  onClick: () => {
+    closeModal();
+    showMood({
+      title: "😔 Noted.",
+      text: "Aș fi preferat să fie adevărat… dar măcar încă putem salva momentul.",
+      ms: 2600,
+      rainOn: true
+    });
+    vibrate(14);
+  }
+}
+
+              ],
+              extraHtml: `<div class="mini muted">Penalty: ${POINTS.caught_lying} points. Data viitoare: adevărul din prima. 😇</div>`
+            });
+          }
+        },
+        {
+          label: "Eeh… poate nu 100% 😅",
+          className: "secondary",
+          onClick: () => {
+            startRain();
+            vibrate(10);
+            addPoints(POINTS.small_lie_fee);
+            openModal({
+              title: "Apreciez sinceritatea… cât de cât. 😌",
+              text: "Facem ceva rapid? Avem vreun mesaj? vreo propunere concretă?",
+              actions: [
+                { label: "Ok, fac acum 💬", className: "primary", onClick: () => { closeModal(); } },
+                {
+  label: "Am înțeles 😅",
+  className: "secondary",
+  onClick: () => {
+    closeModal();
+    showMood({
+      title: "🥲 Mhm.",
+      text: "Ok… dar te rog: următoarea acțiune să fie reală. Nu doar vibe.",
+      ms: 2400,
+      rainOn: true
+    });
+    vibrate(10);
+  }
+}
+
+              ],
+              extraHtml: `<div class="mini muted">Penalty mic: ${POINTS.small_lie_fee} points. (Ai scăpat ușor.)</div>`
+            });
+          }
+        }
+      ],
+      extraHtml: `<div class="mini muted">Atenție: sistemul detectează minciuni prin vibrații de “hehe”.</div>`
+    });
+  });
+});
+</script>
+</body>
+</html>
